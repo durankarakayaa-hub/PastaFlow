@@ -5,87 +5,324 @@ function StockOut() {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [amount, setAmount] = useState("");
 
+  // =========================
+  // GİRİŞ YAPAN KULLANICI
+  // =========================
+
+  const currentUser = JSON.parse(
+    localStorage.getItem("pastaflow_user") || "null"
+  );
+
+  const isManager =
+    currentUser?.role === "YONETICI";
+
+  const userBranch =
+    currentUser?.branch || "";
+
+  // =========================
+  // ÜRÜNLERİ YÜKLE
+  // =========================
+
   useEffect(() => {
     loadProducts();
   }, []);
 
   const loadProducts = async () => {
-    const response = await fetch("http://localhost:3001/products");
-    const data = await response.json();
-    setProducts(data);
+    try {
+      const response = await fetch(
+        "http://localhost:3001/products",
+        {
+          headers: {
+            Authorization:
+              "Bearer " +
+              localStorage.getItem(
+                "pastaflow_token"
+              ),
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Ürünler alınamadı:",
+          data
+        );
+        return;
+      }
+
+      // =========================
+      // SADECE AKTİF ÜRÜNLER
+      // =========================
+
+      let activeProducts =
+        data.filter(
+          (product) =>
+            product.status === "AKTIF"
+        );
+
+      // =========================
+      // PERSONEL SADECE KENDİ ŞUBESİ
+      // =========================
+
+      if (!isManager) {
+        activeProducts =
+          activeProducts.filter(
+            (product) =>
+              product.branch === userBranch
+          );
+      }
+
+      setProducts(activeProducts);
+
+    } catch (error) {
+      console.error(
+        "Ürünler yüklenirken hata:",
+        error
+      );
+    }
   };
 
+  // =========================
+  // STOK ÇIKIŞI
+  // =========================
+
   const removeStock = async () => {
+
     if (!selectedProduct) {
-      alert("Lütfen bir ürün seçiniz.");
+      alert(
+        "Lütfen bir ürün seçiniz."
+      );
       return;
     }
 
-    if (!amount || Number(amount) <= 0) {
-      alert("Lütfen geçerli bir miktar giriniz.");
+    if (
+      !amount ||
+      Number(amount) <= 0
+    ) {
+      alert(
+        "Lütfen geçerli bir miktar giriniz."
+      );
       return;
     }
 
-    const response = await fetch(
-      `http://localhost:3001/products/${selectedProduct}/stock-out`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: Number(amount),
-        }),
+    // =========================
+    // SEÇİLEN ÜRÜNÜ BUL
+    // =========================
+
+    const selected =
+      products.find(
+        (product) =>
+          String(product.id) ===
+          String(selectedProduct)
+      );
+
+    if (!selected) {
+      alert(
+        "❌ Ürün bulunamadı."
+      );
+      return;
+    }
+
+    // =========================
+    // ŞUBE KONTROLÜ
+    // =========================
+
+    if (
+      !isManager &&
+      selected.branch !== userBranch
+    ) {
+      alert(
+        "❌ Bu ürün için stok çıkışı yapma yetkiniz yok."
+      );
+      return;
+    }
+
+    // =========================
+    // STOK KONTROLÜ
+    // =========================
+
+    if (
+      Number(amount) >
+      Number(selected.stock)
+    ) {
+      alert(
+        `❌ Yetersiz stok!\nMevcut stok: ${selected.stock}`
+      );
+      return;
+    }
+
+    try {
+
+      const response =
+        await fetch(
+          `http://localhost:3001/products/${selectedProduct}/stock-out`,
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                "Bearer " +
+                localStorage.getItem(
+                  "pastaflow_token"
+                ),
+            },
+
+            body: JSON.stringify({
+              amount:
+                Number(amount),
+            }),
+          }
+        );
+
+      const data =
+        await response.json();
+
+      console.log(
+        "Stok çıkış cevabı:",
+        data
+      );
+
+      if (
+        response.ok &&
+        data.success
+      ) {
+
+        alert(
+          "✅ Stok çıkışı başarılı!"
+        );
+
+        setSelectedProduct("");
+        setAmount("");
+
+        loadProducts();
+
+      } else {
+
+        alert(
+          "❌ " +
+          (
+            data.message ||
+            "Stok çıkışı yapılamadı."
+          )
+        );
+
       }
-    );
 
-    const data = await response.json();
+    } catch (error) {
 
-    if (data.success) {
-      alert("✅ Stok çıkışı başarılı!");
+      console.error(
+        "Stok çıkışı hatası:",
+        error
+      );
 
-      setSelectedProduct("");
-      setAmount("");
-
-      loadProducts();
-    } else {
-      alert("❌ Stok çıkışı yapılamadı.");
+      alert(
+        "❌ Sunucuya bağlanırken hata oluştu."
+      );
     }
   };
 
   return (
-    <div style={{ padding: "30px", maxWidth: "500px" }}>
-      <h1>📤 Stok Çıkışı</h1>
+    <div
+      style={{
+        padding: "30px",
+        maxWidth: "500px",
+      }}
+    >
+
+      <h1>
+        📤 Stok Çıkışı
+      </h1>
+
+      {/* =========================
+          KULLANICI / ŞUBE
+      ========================= */}
+
+      <div
+        style={{
+          background: "#f3f4f6",
+          border: "1px solid #d1d5db",
+          padding: "10px",
+          borderRadius: "6px",
+          marginBottom: "20px",
+          fontWeight: "bold",
+        }}
+      >
+        👤{" "}
+        {currentUser?.name ||
+          "Kullanıcı"}
+
+        {" | "}
+
+        🏪{" "}
+        {isManager
+          ? "Tüm Şubeler"
+          : userBranch}
+      </div>
+
+      {/* =========================
+          ÜRÜN SEÇ
+      ========================= */}
 
       <select
         value={selectedProduct}
-        onChange={(e) => setSelectedProduct(e.target.value)}
+        onChange={(e) =>
+          setSelectedProduct(
+            e.target.value
+          )
+        }
         style={{
           width: "100%",
           padding: "10px",
           marginBottom: "15px",
         }}
       >
-        <option value="">Ürün Seçiniz</option>
 
-        {products.map((product) => (
-          <option key={product.id} value={product.id}>
-            {product.name} ({product.branch}) - Stok: {product.stock}
-          </option>
-        ))}
+        <option value="">
+          Ürün Seçiniz
+        </option>
+
+        {products.map(
+          (product) => (
+            <option
+              key={product.id}
+              value={product.id}
+            >
+              {product.name}{" "}
+              ({product.branch}){" "}
+              - Stok: {product.stock}
+            </option>
+          )
+        )}
+
       </select>
+
+      {/* =========================
+          MİKTAR
+      ========================= */}
 
       <input
         type="number"
+        min="1"
         placeholder="Çıkılacak Miktar"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) =>
+          setAmount(e.target.value)
+        }
         style={{
           width: "100%",
           padding: "10px",
           marginBottom: "20px",
         }}
       />
+
+      {/* =========================
+          STOKTAN DÜŞ
+      ========================= */}
 
       <button
         onClick={removeStock}
@@ -101,6 +338,7 @@ function StockOut() {
       >
         ➖ Stoktan Düş
       </button>
+
     </div>
   );
 }
