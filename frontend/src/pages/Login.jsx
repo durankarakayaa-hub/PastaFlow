@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 function Login() {
 
   const navigate = useNavigate();
@@ -29,8 +29,8 @@ function Login() {
     try {
 
       const response = await fetch(
-        "http://localhost:3001/login",
-        {
+  `${API_URL}/login`,
+  {
           method: "POST",
 
           headers: {
@@ -259,6 +259,31 @@ function Login() {
           </button>
 
         </form>
+
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "25px",
+            paddingTop: "15px",
+            borderTop: "1px solid #e5e7eb",
+            color: "#6b7280",
+            fontSize: "12px",
+            lineHeight: "1.6",
+          }}
+        >
+          <div>
+            PastaFlow, Duran KARAKAYA’nın geliştirdiği bir yazılımdır.
+          </div>
+
+          <div
+            style={{
+              marginTop: "3px",
+              fontSize: "11px",
+            }}
+          >
+            © 2026 KARAKAYA
+          </div>
+        </div>
 
       </div>
 

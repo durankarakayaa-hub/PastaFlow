@@ -557,19 +557,7 @@ setUnit("ADET");
           }
           style={inputStyle}
         />
-<select
-  value={unit}
-  onChange={(e) =>
-    setUnit(e.target.value)
-  }
-  style={inputStyle}
->
-  <option value="ADET">ADET</option>
-  <option value="KG">KG</option>
-  <option value="LT">LT</option>
-  <option value="KOLİ">KOLİ</option>
-  <option value="PAKET">PAKET</option>
-</select>
+
         {/* YÖNETİCİ ŞUBE SEÇER */}
 
         {isManager ? (

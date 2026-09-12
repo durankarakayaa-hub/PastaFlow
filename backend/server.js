@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
@@ -53,7 +55,15 @@ const db = new sqlite3.Database(
     }
   }
 );
+db.configure("busyTimeout", 10000);
 
+db.run("PRAGMA journal_mode = WAL;", (err) => {
+  if (err) {
+    console.log("❌ SQLite WAL hatası:", err.message);
+  } else {
+    console.log("✅ SQLite WAL modu aktif.");
+  }
+});
 
 app.use(cors());
 app.use(express.json());
@@ -229,6 +239,10 @@ app.put("/branches/:id/status", (req, res) => {
   );
 
 });
+// =============================
+// KULLANICILAR
+// =============================
+
 app.get("/users", (req, res) => {
 
   db.all(
@@ -246,6 +260,12 @@ app.get("/users", (req, res) => {
   );
 
 });
+
+
+// =============================
+// KULLANICI EKLEME
+// =============================
+
 app.post("/users", (req, res) => {
 
   const {
@@ -259,9 +279,8 @@ app.post("/users", (req, res) => {
   db.run(
     `
     INSERT INTO users
-    (username,password,fullname,role,branch,status)
-    VALUES
-    (?,?,?,?,?,'AKTIF')
+    (username, password, fullname, role, branch, status)
+    VALUES (?, ?, ?, ?, ?, 'AKTIF')
     `,
     [
       username,
@@ -288,8 +307,67 @@ app.post("/users", (req, res) => {
   );
 
 });
+
+
+// =============================
+// KULLANICI GÜNCELLEME
+// =============================
+
 app.put("/users/:id", (req, res) => {
+
+  const { id } = req.params;
+
+  const {
+    username,
+    password,
+    fullname,
+    role,
+    branch,
+  } = req.body;
+
+  db.run(
+    `
+    UPDATE users
+    SET
+      username = ?,
+      password = ?,
+      fullname = ?,
+      role = ?,
+      branch = ?
+    WHERE id = ?
+    `,
+    [
+      username,
+      password,
+      fullname,
+      role,
+      branch,
+      id,
+    ],
+    function (err) {
+
+      if (err) {
+        return res.json({
+          success: false,
+          message: "Kullanıcı güncellenemedi.",
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "✅ Kullanıcı başarıyla güncellendi.",
+      });
+
+    }
+  );
+
+});
+
+
+// =============================
 // KULLANICI AKTİF / PASİF
+// =============================
+
 app.put("/users/:id/status", (req, res) => {
 
   const { id } = req.params;
@@ -344,53 +422,6 @@ app.put("/users/:id/status", (req, res) => {
 
         }
       );
-
-    }
-  );
-
-});
-  const { id } = req.params;
-
-  const {
-    username,
-    password,
-    fullname,
-    role,
-    branch,
-  } = req.body;
-
-  db.run(
-    `
-    UPDATE users
-    SET
-      username = ?,
-      password = ?,
-      fullname = ?,
-      role = ?,
-      branch = ?
-    WHERE id = ?
-    `,
-    [
-      username,
-      password,
-      fullname,
-      role,
-      branch,
-      id,
-    ],
-    function (err) {
-
-      if (err) {
-        return res.json({
-          success: false,
-          message: "Kullanıcı güncellenemedi.",
-        });
-      }
-
-      res.json({
-        success: true,
-        message: "✅ Kullanıcı başarıyla güncellendi.",
-      });
 
     }
   );
@@ -2188,10 +2219,10 @@ app.get("/fix-branch-names", (req, res) => {
   });
 
 });
-app.listen(3001,()=>{
+const PORT = process.env.PORT || 3001;
 
- console.log(
-  "🚀 PastaFlow Backend 3001 portunda çalışıyor."
- );
-
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(
+    `🚀 PastaFlow Backend ${PORT} portunda çalışıyor.`
+  );
 });
