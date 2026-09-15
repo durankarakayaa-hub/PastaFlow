@@ -11,7 +11,8 @@ const db = new sqlite3.Database(
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
+console.log("LOGIN SECRET VAR MI:", !!JWT_SECRET);
+console.log("LOGIN SECRET UZUNLUK:", JWT_SECRET ? JWT_SECRET.length : 0);
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET tanımlı değil.");
 }
@@ -21,6 +22,7 @@ if (!JWT_SECRET) {
 // =========================
 
 router.post("/", async (req, res) => {
+  console.log("🔥🔥🔥 LOGIN ROUTE BU BACKEND'E GELDİ 🔥🔥🔥");
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -121,7 +123,8 @@ router.post("/", async (req, res) => {
       // =========================
       // JWT TOKEN
       // =========================
-
+console.log("🔥 LOGIN JWT SECRET UZUNLUK:", JWT_SECRET.length);
+console.log("🔥 LOGIN JWT TOKEN ÜRETİLİYOR...");
       const token = jwt.sign(
         {
           id: user.id,
