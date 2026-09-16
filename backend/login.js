@@ -13,9 +13,6 @@ const db = new sqlite3.Database(
   path.join(databaseDir, "pastaflow.db")
 );
 
-const db = new sqlite3.Database(
-  path.join(__dirname, "database", "pastaflow.db")
-);
 
 const router = express.Router();
 
