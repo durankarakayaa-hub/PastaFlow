@@ -1,8 +1,17 @@
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const databaseDir = path.join(__dirname, "database");
+
+fs.mkdirSync(databaseDir, { recursive: true });
+
+const db = new sqlite3.Database(
+  path.join(databaseDir, "pastaflow.db")
+);
 
 const db = new sqlite3.Database(
   path.join(__dirname, "database", "pastaflow.db")

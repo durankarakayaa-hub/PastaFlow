@@ -1,8 +1,13 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
+const fs = require("fs");
+
+const databaseDir = path.join(__dirname, "database");
+
+fs.mkdirSync(databaseDir, { recursive: true });
 
 const db = new sqlite3.Database(
-  path.join(__dirname, "database", "pastaflow.db")
+  path.join(databaseDir, "pastaflow.db")
 );
 
 db.serialize(() => {
@@ -16,7 +21,7 @@ db.serialize(() => {
     branch TEXT,
     stock INTEGER,
     critical INTEGER,
-    lastMovement TEXT
+    lastMovement TEXT,
     status TEXT DEFAULT 'AKTIF'
 )
   `);
@@ -126,7 +131,7 @@ VALUES
 
 (
 'Duran',
-process.env.INIT_ADMIN_PASSWORD
+process.env.INIT_ADMIN_PASSWORD,
 'Duran Karakaya',
 'YONETICI',
 'MERKEZ',
