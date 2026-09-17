@@ -36,7 +36,7 @@ const logoImportService = {
   return response.json();
 },
 confirmSave: async () => {
-  const response = await fetch("http://localhost:3001/logo-import-save", {
+  const response = await fetch(`${API_URL}/logo-import-save`, {
     method: "POST",
   });
 
