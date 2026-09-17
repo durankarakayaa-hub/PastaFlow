@@ -68,11 +68,11 @@ function Transfer() {
         branchesResponse,
       ] = await Promise.all([
         fetch(
-          "http://localhost:3001/products",
+          "https://pastaflow.onrender.com/products",
           { headers }
         ),
         fetch(
-          "http://localhost:3001/branches",
+          "https://pastaflow.onrender.com/branches",
           { headers }
         ),
       ]);
@@ -312,7 +312,7 @@ try {
 
       const response =
         await fetch(
-          "http://localhost:3001/products/transfer",
+          "https://pastaflow.onrender.com/products/transfer",
           {
             method: "PUT",
 

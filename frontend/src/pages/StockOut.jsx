@@ -30,7 +30,7 @@ function StockOut() {
   const loadProducts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3001/products",
+        "https://pastaflow.onrender.com/products",
         {
           headers: {
             Authorization:
@@ -157,7 +157,7 @@ function StockOut() {
 
       const response =
         await fetch(
-          `http://localhost:3001/products/${selectedProduct}/stock-out`,
+          `https://pastaflow.onrender.com/products/${selectedProduct}/stock-out`,
           {
             method: "PUT",
 

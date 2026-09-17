@@ -6,7 +6,7 @@ function BranchManagement() {
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);
 const loadBranches = async () => {
-  const response = await fetch("http://localhost:3001/branches");
+  const response = await fetch("https://pastaflow.onrender.com/branches");
   const data = await response.json();
   setBranches(data);
 };
@@ -14,7 +14,7 @@ useEffect(() => {
   loadBranches();
 }, []);
   const addBranch = async () => {
-    const response = await fetch("http://localhost:3001/branches", {
+    const response = await fetch("https://pastaflow.onrender.com/branches", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const editBranch = (branch) => {
 
   const updateBranch = async () => {
     const response = await fetch(
-      `http://localhost:3001/branches/${editingId}`,
+      `https://pastaflow.onrender.com/branches/${editingId}`,
       {
         method: "PUT",
         headers: {
@@ -69,7 +69,7 @@ const editBranch = (branch) => {
 
   const toggleBranchStatus = async (branch) => {
     const response = await fetch(
-      `http://localhost:3001/branches/${branch.id}/status`,
+      `https://pastaflow.onrender.com/branches/${branch.id}/status`,
       {
         method: "PUT",
       }

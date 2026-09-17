@@ -39,7 +39,7 @@ const [unit, setUnit] = useState("ADET");
   const loadBranches = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3001/branches"
+        "https://pastaflow.onrender.com/branches"
       );
 
       const data = await response.json();
@@ -67,7 +67,7 @@ const [unit, setUnit] = useState("ADET");
   const loadProducts = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3001/products"
+        "https://pastaflow.onrender.com/products"
       );
 
       const data = await response.json();
@@ -111,8 +111,8 @@ const [unit, setUnit] = useState("ADET");
     }
 
     const url = editingId
-      ? `http://localhost:3001/products/${editingId}`
-      : "http://localhost:3001/products";
+      ? `https://pastaflow.onrender.com/products/${editingId}`
+      : "https://pastaflow.onrender.com/products";
 
     const method = editingId
       ? "PUT"
@@ -205,7 +205,7 @@ setUnit("ADET");
     try {
 
       const response = await fetch(
-        `http://localhost:3001/products/${id}/status`,
+        `https://pastaflow.onrender.com/products/${id}/status`,
         {
           method: "PUT",
 

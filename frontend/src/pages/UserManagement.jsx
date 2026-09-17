@@ -10,7 +10,7 @@ const [role, setRole] = useState("PERSONEL");
 const [branch, setBranch] = useState("MERKEZ");
   const loadUsers = async () => {
 
-    const response = await fetch("http://localhost:3001/users");
+    const response = await fetch("https://pastaflow.onrender.com/users");
     const data = await response.json();
 
     setUsers(data);
@@ -20,8 +20,8 @@ const addUser = async () => {
 
   const response = await fetch(
   editingId
-    ? `http://localhost:3001/users/${editingId}`
-    : "http://localhost:3001/users",
+    ? `https://pastaflow.onrender.com/users/${editingId}`
+    : "https://pastaflow.onrender.com/users",
   {
     method: editingId ? "PUT" : "POST",
     headers: {

@@ -80,9 +80,9 @@ function Settings() {
         branchesResponse,
         usersResponse
       ] = await Promise.all([
-        fetch("http://localhost:3001/products"),
-        fetch("http://localhost:3001/branches"),
-        fetch("http://localhost:3001/users"),
+        fetch("https://pastaflow.onrender.com/products"),
+        fetch("https://pastaflow.onrender.com/branches"),
+        fetch("https://pastaflow.onrender.com/users"),
       ]);
 
       const productsData = await productsResponse.json();
@@ -120,7 +120,7 @@ function Settings() {
     }
 
     const response = await fetch(
-      "http://localhost:3001/products",
+      "https://pastaflow.onrender.com/products",
       {
         method: "POST",
 
@@ -186,7 +186,7 @@ function Settings() {
     }
 
     const response = await fetch(
-      `http://localhost:3001/products/${editingProduct.id}`,
+      `https://pastaflow.onrender.com/products/${editingProduct.id}`,
       {
 
         method: "PUT",
@@ -241,7 +241,7 @@ function Settings() {
         : "AKTIF";
 
     const response = await fetch(
-      `http://localhost:3001/products/${product.id}/status`,
+      `https://pastaflow.onrender.com/products/${product.id}/status`,
       {
 
         method: "PUT",
@@ -293,7 +293,7 @@ function Settings() {
     }
 
     const response = await fetch(
-      "http://localhost:3001/branches",
+      "https://pastaflow.onrender.com/branches",
       {
 
         method: "POST",
@@ -350,7 +350,7 @@ function Settings() {
     }
 
     const response = await fetch(
-      `http://localhost:3001/branches/${editingBranch.id}`,
+      `https://pastaflow.onrender.com/branches/${editingBranch.id}`,
       {
 
         method: "PUT",
@@ -395,7 +395,7 @@ function Settings() {
   const toggleBranchStatus = async (branch) => {
 
     const response = await fetch(
-      `http://localhost:3001/branches/${branch.id}/status`,
+      `https://pastaflow.onrender.com/branches/${branch.id}/status`,
       {
         method: "PUT",
       }
@@ -443,7 +443,7 @@ function Settings() {
     }
 
     const response = await fetch(
-      "http://localhost:3001/users",
+      "https://pastaflow.onrender.com/users",
       {
 
         method: "POST",
@@ -512,7 +512,7 @@ function Settings() {
     }
 
     const response = await fetch(
-      `http://localhost:3001/users/${editingUser.id}`,
+      `https://pastaflow.onrender.com/users/${editingUser.id}`,
       {
 
         method: "PUT",
@@ -562,7 +562,7 @@ function Settings() {
   const toggleUserStatus = async (user) => {
 
     const response = await fetch(
-      `http://localhost:3001/users/${user.id}/status`,
+      `https://pastaflow.onrender.com/users/${user.id}/status`,
       {
         method: "PUT",
       }

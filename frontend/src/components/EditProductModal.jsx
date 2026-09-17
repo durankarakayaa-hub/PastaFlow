@@ -21,7 +21,7 @@ useEffect(() => {
 }, [product]);
 const saveProduct = async () => {
   const response = await fetch(
-    `http://localhost:3001/products/${product.id}`,
+    `https://pastaflow.onrender.com/products/${product.id}`,
     {
       method: "PUT",
       headers: {

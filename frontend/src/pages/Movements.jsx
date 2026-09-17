@@ -24,13 +24,13 @@ function Movements() {
 
 const [movementResponse, branchResponse] =
   await Promise.all([
-    fetch("http://localhost:3001/stock-movements", {
+    fetch("https://pastaflow.onrender.com/stock-movements", {
       headers: {
         Authorization: "Bearer " + token,
       },
     }),
 
-    fetch("http://localhost:3001/branches", {
+    fetch("https://pastaflow.onrender.com/branches", {
       headers: {
         Authorization: "Bearer " + token,
       },

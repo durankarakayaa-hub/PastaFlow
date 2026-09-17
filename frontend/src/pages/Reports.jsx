@@ -22,7 +22,7 @@ const [aiLoading, setAiLoading] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("pastaflow_token");
 
-fetch("http://localhost:3001/me", {
+fetch("https://pastaflow.onrender.com/me", {
   headers: {
     Authorization: "Bearer " + token,
   },
@@ -43,11 +43,11 @@ fetch("http://localhost:3001/me", {
   }
 }
   });
-    fetch("http://localhost:3001/products")
+    fetch("https://pastaflow.onrender.com/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
 
-    fetch("http://localhost:3001/stock-movements", {
+    fetch("https://pastaflow.onrender.com/stock-movements", {
   headers: {
     Authorization:
       "Bearer " +
@@ -73,7 +73,7 @@ fetch("http://localhost:3001/me", {
       err
     );
   });
-  fetch("http://localhost:3001/branches")
+  fetch("https://pastaflow.onrender.com/branches")
   .then((res) => res.json())
   .then((data) => {
     const activeBranches = data

@@ -51,7 +51,7 @@ function Waste() {
       // Ürünler
       const productsResponse =
         await fetch(
-          "http://localhost:3001/products",
+          "https://pastaflow.onrender.com/products",
           {
             headers,
           }
@@ -83,7 +83,7 @@ function Waste() {
       // Şubeler
       const branchesResponse =
         await fetch(
-          "http://localhost:3001/branches",
+          "https://pastaflow.onrender.com/branches",
           {
             headers,
           }
@@ -245,7 +245,7 @@ console.log(
 );
       const response =
         await fetch(
-          "http://localhost:3001/waste",
+          "https://pastaflow.onrender.com/waste",
           {
             method: "POST",
 
