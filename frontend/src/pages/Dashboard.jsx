@@ -68,7 +68,7 @@ console.log("Kullanıcı şubesi:", userBranch);
 
     // HAREKETLER
     const movementResponse = await fetch(
-      "http://127.0.0.1:3001/stock-movements",
+      "https://pastaflow.onrender.com/stock-movements",
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -80,7 +80,7 @@ console.log("Kullanıcı şubesi:", userBranch);
 
     // ŞUBELER
     const branchesResponse = await fetch(
-      "http://127.0.0.1:3001/branches"
+      "https://pastaflow.onrender.com/branches"
     );
 
     const branchesData = await branchesResponse.json();
