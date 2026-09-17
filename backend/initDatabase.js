@@ -125,19 +125,17 @@ db.run(`
 `);
 db.run(`
   INSERT OR IGNORE INTO users
-(username,password,fullname,role,branch,status)
-
-VALUES
-
-(
-'Duran',
-process.env.INIT_ADMIN_PASSWORD,
-'Duran Karakaya',
-'YONETICI',
-'MERKEZ',
-'AKTIF'
-);
-`);
+  (username,password,fullname,role,branch,status)
+  VALUES (?, ?, ?, ?, ?, ?)
+`,
+[
+  'Duran',
+  process.env.INIT_ADMIN_PASSWORD,
+  'Duran Karakaya',
+  'YONETICI',
+  'MERKEZ',
+  'AKTIF'
+]);
   console.log("✅ Veritabanı tabloları hazır.");
 
   db.close();
